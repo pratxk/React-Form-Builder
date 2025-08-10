@@ -251,8 +251,8 @@ const EnhancedFormPreview: React.FC<{
             key={field.id}
             label={field.label}
             value={value}
-            onChange={(e) => handleFieldChange(field.id, e.target.value)}
-            options={field.options || []}
+            onChange={(newValue) => handleFieldChange(field.id, newValue)}
+            options={(field.options || []).map(option => ({ value: option, label: option }))}
             required={field.required}
             error={!!error}
             helperText={error}

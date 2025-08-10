@@ -3,7 +3,17 @@ import Card from "./Card";
 import Input from "./Input";
 import Textarea from "./Textarea";
 import Select from "./Select";
-import { Box, Typography, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Checkbox, FormHelperText } from "@mui/material";
+import {
+  Box,
+  Typography,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Checkbox,
+  FormHelperText,
+} from "@mui/material";
 import { Eye } from "lucide-react"; // assuming you keep lucide icons
 import type { useFormStore } from "../store/useFormStore";
 import type { FormField } from "../types/types";
@@ -66,7 +76,10 @@ const FormPreview: React.FC<{
         const parentField = currentForm?.fields.find((f) => f.id === parentId);
         if (parentField) {
           const value = formData[parentId] || 0;
-          formula = formula.replace(new RegExp(parentId, "g"), value.toString());
+          formula = formula.replace(
+            new RegExp(parentId, "g"),
+            value.toString()
+          );
         }
       });
 
@@ -131,7 +144,17 @@ const FormPreview: React.FC<{
     return (
       <Box key={field.id} mb={4}>
         <FormControl fullWidth error={!!error} disabled={field.isDerived}>
-          <FormLabel sx={{ mb: 1, fontWeight: "medium", display: "flex", alignItems: "center", gap: 1 }}>
+          <FormLabel
+            sx={{
+              mb: 1,
+              fontWeight: 500,
+              fontSize: "1rem",
+              color: "text.primary",
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+            }}
+          >
             {field.label}
             {field.required && (
               <Typography component="span" color="error">
@@ -139,7 +162,12 @@ const FormPreview: React.FC<{
               </Typography>
             )}
             {field.isDerived && (
-              <Typography component="span" color="primary" fontSize="0.75rem" ml={1}>
+              <Typography
+                component="span"
+                color="primary"
+                fontSize="0.75rem"
+                ml={1}
+              >
                 (auto-calculated)
               </Typography>
             )}
@@ -151,7 +179,9 @@ const FormPreview: React.FC<{
                 return (
                   <Input
                     value={value}
-                    onChange={(e) => handleFieldChange(field.id, e.target.value)}
+                    onChange={(e) =>
+                      handleFieldChange(field.id, e.target.value)
+                    }
                     disabled={field.isDerived}
                   />
                 );
@@ -160,7 +190,9 @@ const FormPreview: React.FC<{
                   <Input
                     type="number"
                     value={value}
-                    onChange={(e) => handleFieldChange(field.id, e.target.value)}
+                    onChange={(e) =>
+                      handleFieldChange(field.id, e.target.value)
+                    }
                     disabled={field.isDerived}
                   />
                 );
@@ -168,7 +200,9 @@ const FormPreview: React.FC<{
                 return (
                   <Textarea
                     value={value}
-                    onChange={(e) => handleFieldChange(field.id, e.target.value)}
+                    onChange={(e) =>
+                      handleFieldChange(field.id, e.target.value)
+                    }
                     disabled={field.isDerived}
                   />
                 );
@@ -176,10 +210,15 @@ const FormPreview: React.FC<{
                 return (
                   <Select
                     value={value}
-                    onChange={(next) => handleFieldChange(field.id, next as string)}
+                    onChange={(next) =>
+                      handleFieldChange(field.id, next as string)
+                    }
                     options={[
                       { value: "", label: "Select an option" },
-                      ...(field.options?.map((option) => ({ value: option, label: option })) || []),
+                      ...(field.options?.map((option) => ({
+                        value: option,
+                        label: option,
+                      })) || []),
                     ]}
                     disabled={field.isDerived}
                   />
@@ -188,7 +227,9 @@ const FormPreview: React.FC<{
                 return (
                   <RadioGroup
                     value={value}
-                    onChange={(e) => handleFieldChange(field.id, e.target.value)}
+                    onChange={(e) =>
+                      handleFieldChange(field.id, e.target.value)
+                    }
                     row={false}
                   >
                     {field.options?.map((option) => (
@@ -207,7 +248,9 @@ const FormPreview: React.FC<{
                     control={
                       <Checkbox
                         checked={!!value}
-                        onChange={(e) => handleFieldChange(field.id, e.target.checked)}
+                        onChange={(e) =>
+                          handleFieldChange(field.id, e.target.checked)
+                        }
                         disabled={field.isDerived}
                       />
                     }
@@ -219,7 +262,9 @@ const FormPreview: React.FC<{
                   <Input
                     type="date"
                     value={value}
-                    onChange={(e) => handleFieldChange(field.id, e.target.value)}
+                    onChange={(e) =>
+                      handleFieldChange(field.id, e.target.value)
+                    }
                     disabled={field.isDerived}
                   />
                 );
@@ -249,10 +294,16 @@ const FormPreview: React.FC<{
         <Card>
           <Box sx={{ p: 8, textAlign: "center" }}>
             <Eye size={64} className="mx-auto" color="#9ca3af" />
-            <Typography variant="h5" color="text.secondary" sx={{ mt: 2, mb: 1 }}>
+            <Typography
+              variant="h5"
+              color="text.secondary"
+              sx={{ mt: 2, mb: 1 }}
+            >
               No form to preview
             </Typography>
-            <Typography color="text.secondary">Create a form first to see the preview</Typography>
+            <Typography color="text.secondary">
+              Create a form first to see the preview
+            </Typography>
           </Box>
         </Card>
       </Box>
@@ -260,8 +311,14 @@ const FormPreview: React.FC<{
   }
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "background.default", p: { xs: 2, md: 4 } }}>
-      <Box sx={{ maxWidth: 960, mx: 'auto' }}>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        bgcolor: "background.default",
+        p: { xs: 2, md: 4 },
+      }}
+    >
+      <Box sx={{ maxWidth: 960, mx: "auto" }}>
         <Box mb={4}>
           <Typography variant="h3" fontWeight="bold" gutterBottom>
             Form Preview
@@ -274,7 +331,9 @@ const FormPreview: React.FC<{
         <Card>
           <Box p={6}>
             {currentForm.fields.map((field) => (
-              <React.Fragment key={field.id}>{renderField(field)}</React.Fragment>
+              <React.Fragment key={field.id}>
+                {renderField(field)}
+              </React.Fragment>
             ))}
 
             <Box mt={8} pt={3} borderTop="1px solid" borderColor="divider">
@@ -290,4 +349,3 @@ const FormPreview: React.FC<{
 };
 
 export default FormPreview;
-
