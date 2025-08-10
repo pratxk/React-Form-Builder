@@ -29,6 +29,18 @@ export interface FormState {
   savedForms: FormSchema[];
 }
 
+export interface FormValidationState {
+  isValid: boolean;
+  errors: Record<string, string>;
+}
+
+export interface FormSubmissionData {
+  formId: string;
+  formName: string;
+  submittedAt: string;
+  data: Record<string, any>;
+}
+
 // Initial state
 export const initialState: FormState = {
   currentForm: null,

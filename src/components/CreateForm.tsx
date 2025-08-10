@@ -8,6 +8,7 @@ import Input from './Input';
 import type { useFormStore } from '../store/useFormStore';
 import { FieldConfiguration } from './FieldConfiguration';
 import { Modal } from './Modal';
+import { DraggableFieldList } from './DraggableFieldList';
 import type { FormField, FormSchema } from '../types/types';
 
 interface CreateFormProps {
@@ -58,17 +59,27 @@ export const CreateForm: React.FC<CreateFormProps> = ({ store, onNavigate }) => 
     });
   };
 
+  const reorderFields = (newFields: FormField[]) => {
+    store.updateCurrentForm({
+      ...currentForm,
+      fields: newFields,
+    });
+  };
+
   const saveForm = () => {
     if (!formName.trim()) return;
 
+    // Check if this form already exists in saved forms
+    const existingForm = store.state.savedForms.find(f => f.id === currentForm.id && currentForm.id !== '');
+    
     const formToSave: FormSchema = {
       ...currentForm,
-      id: currentForm.id || Date.now().toString(),
+      id: currentForm.id && currentForm.id !== '' ? currentForm.id : Date.now().toString(),
       name: formName,
-      createdAt: new Date().toISOString(),
+      createdAt: existingForm ? existingForm.createdAt : new Date().toISOString(),
     };
 
-    if (currentForm.id) {
+    if (existingForm) {
       store.updateSavedForm(formToSave);
     } else {
       store.addSavedForm(formToSave);
@@ -107,6 +118,22 @@ export const CreateForm: React.FC<CreateFormProps> = ({ store, onNavigate }) => 
             Form Builder
           </Typography>
           <Stack direction="row" spacing={2}>
+            <Button
+              onClick={() => {
+                // Create a new empty form
+                store.updateCurrentForm({
+                  id: '',
+                  name: '',
+                  fields: [],
+                  createdAt: '',
+                });
+              }}
+              variant="outline"
+              type="button"
+            >
+              <Plus size={18} style={{ marginRight: 8 }} />
+              New Form
+            </Button>
             <Button
               onClick={() => onNavigate('/preview')}
               variant="outline"
@@ -188,17 +215,16 @@ export const CreateForm: React.FC<CreateFormProps> = ({ store, onNavigate }) => 
                 </Typography>
               </Box>
             ) : (
-              <Box display="flex" flexDirection="column" gap={3}>
-                {currentForm.fields.map((field) => (
-                  <FieldConfiguration
-                    key={field.id}
-                    field={field}
-                    onUpdate={(updatedField) => updateField(field.id, updatedField)}
-                    onDelete={() => deleteField(field.id)}
-                    allFields={currentForm.fields}
-                  />
-                ))}
-              </Box>
+              <DraggableFieldList
+                fields={currentForm.fields}
+                onFieldsReorder={reorderFields}
+                onDeleteField={deleteField}
+                onEditField={(fieldId) => {
+                  // This will be handled by the FieldConfiguration component
+                  // when it's opened in edit mode
+                }}
+                onUpdateField={updateField}
+              />
             )}
           </Card>
         </Box>

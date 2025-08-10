@@ -13,6 +13,9 @@ interface Props {
   onUpdate: (field: FormField) => void;
   onDelete: () => void;
   allFields: FormField[];
+  onCancel?: () => void;
+  isExpanded?: boolean;
+  onToggleExpanded?: () => void;
 }
 
 export const FieldConfiguration: React.FC<Props> = ({
@@ -20,8 +23,15 @@ export const FieldConfiguration: React.FC<Props> = ({
   onUpdate,
   onDelete,
   allFields,
+  onCancel,
+  isExpanded,
+  onToggleExpanded,
 }) => {
-  const [expanded, setExpanded] = useState(false);
+  const [internalExpanded, setInternalExpanded] = useState(false);
+  
+  // Use external expanded state if provided, otherwise use internal state
+  const expanded = isExpanded !== undefined ? isExpanded : internalExpanded;
+  const setExpanded = onToggleExpanded || setInternalExpanded;
 
   const handleValidationChange = (index: number, validation: ValidationRule) => {
     const newValidations = [...field.validations];
@@ -276,6 +286,15 @@ export const FieldConfiguration: React.FC<Props> = ({
               ))}
             </Box>
           </Box>
+
+          {/* Action Buttons */}
+          {onCancel && (
+            <Box display="flex" justifyContent="flex-end" gap={2} mt={3}>
+              <Button onClick={onCancel} variant="outline" type="button">
+                Cancel
+              </Button>
+            </Box>
+          )}
         </Box>
       )}
     </Card>

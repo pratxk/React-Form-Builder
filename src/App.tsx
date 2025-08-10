@@ -5,7 +5,7 @@ import { useFormStore } from './store/useFormStore';
 import './App.css';
 import { CreateForm } from './components/CreateForm';
 import { MyForms } from './components/MyForms';
-import FormPreview from './components/FormPreview';
+import EnhancedFormPreview from './components/EnhancedFormPreview';
 import {Navigation} from './components/Navigation'
 
 const App: React.FC = () => {
@@ -21,7 +21,7 @@ const App: React.FC = () => {
       case '/create':
         return <CreateForm store={store} onNavigate={navigate} />;
       case '/preview':
-        return <FormPreview store={store} />;
+        return <EnhancedFormPreview store={store} />;
       case '/myforms':
         return <MyForms store={store} onNavigate={navigate} />;
       default:
